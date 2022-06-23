@@ -9,22 +9,28 @@ $$
 NDVI = \frac{NIR-RED}{NIR+RED}
 $$
 
+### NDVI: Normalized Difference Vegetation Index
+
+$$
+\text{NDVI A} = \frac{\text{RED EDGE 4}-RED}{\text{RED EDGE 4}+RED}
+$$
+
 ### NDSI: Normalized Difference Snow Index
 
 $$
-NDSI = \frac{GREEN-SWIR1}{GREEN+SWIR1}
+NDSI = \frac{GREEN-\text{SWIR 1}}{GREEN+\text{SWIR 1}}
 $$
 
 ### NBI: Normalized Burn Ratio
 
 $$
-NBI = \frac{NIR-SWIR2}{NIR+SWIR2}
+NBI = \frac{NIR-\text{SWIR 2}}{NIR+\text{SWIR 2}}
 $$
 
 ### NDWI: Normalized Difference Water Index (Gao, 1996)
 
 $$
-NDWI = \frac{NIR-SWIR 1}{NIR+SWIR1}
+NDWI = \frac{NIR-\text{SWIR 1}}{NIR+\text{SWIR 1}}
 $$
 
 ### NDWI: Normalized Difference Water Index (McFeeters, 1996)
