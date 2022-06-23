@@ -12,7 +12,7 @@ $$
 ### NDSI: Normalized Difference Snow Index
 
 $$
-NDSI = \frac{GREEN-SWIR2}{GREEN+SWIR2}
+NDSI = \frac{GREEN-SWIR1}{GREEN+SWIR1}
 $$
 
 ### NBI: Normalized Burn Ratio
@@ -24,7 +24,7 @@ $$
 ### NDWI: Normalized Difference Water Index (Gao, 1996)
 
 $$
-NDWI = \frac{NIR-SWIR 1}{NIR+SWIR 1}
+NDWI = \frac{NIR-SWIR 1}{NIR+SWIR1}
 $$
 
 ### NDWI: Normalized Difference Water Index (McFeeters, 1996)

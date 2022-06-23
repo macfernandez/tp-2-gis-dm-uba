@@ -2,16 +2,10 @@ import os
 import subprocess
 from glob import glob
 
-# chequear que sean estas las bandas correctas
-# las fórmulas ya tienen la corrección del raster (bandas-1)
-# consultar si NDSI y NBI usand SWIR 2 y NDWI_gao SWIR 1
-# esto es lo que nos dejó Fede: (consultar)
-# NDVI:(im1b7-im1b3)/(im1b7+im1b3)
-
 indexes = {
         "NDVI":"(im1b4-im1b3)/(im1b4+im1b3)",
         "NDVI_a":"(im1b5-im1b3)/(im1b5+im1b3)",
-        "NDSI":"(im1b2-im1b7)/(im1b2+im1b7)",
+        "NDSI":"(im1b2-im1b6)/(im1b2+im1b6)",
         "NBI":"(im1b4-im1b7)/(im1b4+im1b7)",
         "NDWI_gao":"(im1b4-im1b6)/(im1b4+im1b6)",
         "NDWI_mcfeeters":"(im1b2-im1b4)/(im1b2+im1b4)"
