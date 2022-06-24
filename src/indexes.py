@@ -1,25 +1,30 @@
 import os
 import subprocess
+from typing import *
 from glob import glob
 
-indexes = {
-        "NDVI":"(im1b4-im1b3)/(im1b4+im1b3)",
-        "NDVI_a":"(im1b5-im1b3)/(im1b5+im1b3)",
-        "NDSI":"(im1b2-im1b6)/(im1b2+im1b6)",
-        "NBI":"(im1b4-im1b7)/(im1b4+im1b7)",
-        "NDWI_gao":"(im1b4-im1b6)/(im1b4+im1b6)",
-        "NDWI_mcfeeters":"(im1b2-im1b4)/(im1b2+im1b4)"
-}
-
-def save_in_bucket(file_path:str, bucket:str):
-    folder_path = os.path.dirname(file_path)
-    bucket_blob = os.path.join(bucket, folder_path)
-    cmd = """gsutil -m cp {file} {blob}""".format(file=file_path, blob=bucket_blob)
-    subprocess.run(cmd, shell=True)
+from src.utils import save_path_in_bucket
+from src.indexes_definition import indexes
 
 
-def calc_index(input_folder:str, index:str, bucket:str=None):
-    
+def calc_index(input_folder:str, index:str, bucket:Union[str,None]=None)->None:
+    '''
+        Parameters
+        ----------
+            input_folder: str
+                Folder with subfolders and .tif files.
+
+            index: str
+                Spectral index.
+
+            bucket: str, default: None
+                GCP Bucket location URI for output file.
+                If None, output file is not saved in bucket.
+
+        Returns
+        -------
+            None
+    '''
     images = glob(f'{input_folder}/*/*[0-9].tif')
     
     for image in images:
@@ -30,7 +35,7 @@ def calc_index(input_folder:str, index:str, bucket:str=None):
         """.format(im=image, im_out=im_out_fname, form=indexes.get(index))
         subprocess.run(cmd, shell=True)
         if bucket:
-            save_in_bucket(im_out_fname, bucket)
+            save_path_in_bucket(im_out_fname, bucket)
             os.remove(im_out_fname)
     print(f'\n***** {index} calculated.\n')
 
