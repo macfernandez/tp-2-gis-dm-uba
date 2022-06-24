@@ -26,7 +26,7 @@ Calcula todos los índices y los guarda localmente.
 python -m src.indexes my-path
 ```
 
-## concat_images
+## concat_images.py
 
 ```
 python -m src.concat_images input_folder [-t] [-o] [-i] [-b]
@@ -49,7 +49,7 @@ $$
 NDVI = \frac{NIR-RED}{NIR+RED}
 $$
 
-### NDVI: Normalized Difference Vegetation Index
+### NDVI A:
 
 $$
 \text{NDVI A} = \frac{\text{RED EDGE 4}-RED}{\text{RED EDGE 4}+RED}
