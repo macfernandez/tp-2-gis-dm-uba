@@ -100,13 +100,13 @@ $$
 ### AFRI 1.6: Aerosol free vegetation index 1.6 (Karineli, 2001)
 
 $$
-AFRI\_1\_6 = \frac{\text{RED EDGE 4}-0.66 \times \text{SWIR 1}}{\text{RED EDGE 4}+0.66 \times \text{SWIR 1}}
+\text{AFRI_1_6} = \frac{\text{RED EDGE 4}-0.66 \times \text{SWIR 1}}{\text{RED EDGE 4}+0.66 \times \text{SWIR 1}}
 $$
 
 ### AFRI 2.1: Aerosol free vegetation index 2.1 (Karineli, 2001)
 
 $$
-AFRI\_2\_1 = \frac{\text{RED EDGE 4}-0.5 \times \text{SWIR 2}}{\text{RED EDGE 4}+0.5 \times \text{SWIR 2}}
+\text{AFRI_2_1} = \frac{\text{RED EDGE 4}-0.5 \times \text{SWIR 2}}{\text{RED EDGE 4}+0.5 \times \text{SWIR 2}}
 $$
 
 ### ARVI: Atmospherically resistant vegetation index (Kaufman, 1992)
@@ -118,7 +118,7 @@ $$
 ### ARVI 2: Atmospherically resistant vegetation index 2 (Kaufman, 1992)
 
 $$
-ARVI\_2 = -0.18 + 1.17 \times \frac{NIR-RED}{NIR+RED}
+\text{ARVI_2} = -0.18 + 1.17 \times \frac{NIR-RED}{NIR+RED}
 $$
 
 ### ATSAVI: Adjusted Transformed Soil-Adjusted Vegetation Index (BARET, 1991)
@@ -142,7 +142,7 @@ $$
 ### CRI 550: Carotenoid Reflectance Index 550 (Gitelson, 2001)
 
 $$
-CRI\_550 = \frac{1}{Blue}-\frac{1}{GREEN}
+\text{CRI_550} = \frac{1}{Blue}-\frac{1}{GREEN}
 $$
 
 ### EPIChlb: Eucalyptus Pigment Index for Chlorophyll b (Datt, 1997)
@@ -154,7 +154,7 @@ $$
 ### EVI 2: Enhanced Vegetation Index 2 (Miura, 2008)
 
 $$
-EVI\_2 = 2.4 \times \frac{NIR-RED}{NIR+RED+1}
+\text{EVI_2} = 2.4 \times \frac{NIR-RED}{NIR+RED+1}
 $$
 
 ### GARI: Green Atmospherically Resistant Vegetation Index (Gitelson, 1996)
@@ -184,7 +184,7 @@ $$
 ### MCARI 1: Modified Chlorophyll Absorption in Reflectance Index (Daughtry, 2000)
 
 $$
-MCARI\_1 = 1.2 \times [2.5 \times (NIR-RED)-1.3 \times (NIR-GREEN)]
+\text{MCARI_1} = 1.2 \times [2.5 \times (NIR-RED)-1.3 \times (NIR-GREEN)]
 $$
 
 ### mNDVI: Modified Normalized Difference Vegetation Index (Main, 2001)
@@ -196,19 +196,19 @@ $$
 ### MSAVI 2: Modified Soil-Adjusted Vegetation Index 2 (Qi, 1994)
 
 $$
-MSAVI\_2 = \frac{2 \times NIR+1-\sqrt{(2 \times NIR+1)^2-8 \times (NIR-RED)}}{2}
+\text{MSAVI_2} = \frac{2 \times NIR+1-\sqrt{(2 \times NIR+1)^2-8 \times (NIR-RED)}}{2}
 $$
 
 ### MSR 670: Modified Simple Ratio 670/800 (Chen, 1996)
 
 $$
-MSR\_670 = \frac{\frac{NIR}{RED}-1}{\sqrt{\frac{NIR}{RED}-1}}
+\text{MSR_670} = \frac{\frac{NIR}{RED}-1}{\sqrt{\frac{NIR}{RED}-1}}
 $$
 
 ### MTVI 2: Modified Triangular Vegetation Index 2 (Haboudane, 2004)
 
 $$
-MTVI\_2 = 1.5 \times \frac{1.2 \times (NIR-GREEN)-2.5 \times (RED-GREEN)}{\sqrt{2 \times (NIR+1)^2-(6 \times NIR -5 \times \sqrt{RED})-0.5}}
+\text{MTVI_2} = 1.5 \times \frac{1.2 \times (NIR-GREEN)-2.5 \times (RED-GREEN)}{\sqrt{2 \times (NIR+1)^2-(6 \times NIR -5 \times \sqrt{RED})-0.5}}
 $$
 
 ### NBR: Normalized difference NIR/SWIR normalized Burn Ratio (Key, 2005)
@@ -250,13 +250,13 @@ $$
 ### VARIgreen: Visible Atmospherically Resistant Index Green (Gitelson, 2001)
 
 $$
-VARI\_green = \frac{GREEN-RED}{GREEN-RED+BLUE}
+\text{VARI_green} = \frac{GREEN-RED}{GREEN-RED+BLUE}
 $$
 
 ### WDRVI: Normalized Difference Vegetation Index
 
 $$
-NDVI = \frac{0.1 \times NIR-RED}{0.1 \times NIR+RED}
+WDRVI = \frac{0.1 \times NIR-RED}{0.1 \times NIR+RED}
 $$
 
 
