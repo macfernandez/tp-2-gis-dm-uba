@@ -35,7 +35,7 @@ if __name__ == '__main__':
         parser_method = subparsers.add_parser(
             method,
             help=f'Ejecuta el método {method}',
-            description=f'Genera el comando {command_templ} con los reemplazos indicados'
+            description=f'Genera el comando {command_templ} con los reemplazos indicados (respetar el orden).'
         )
         parameters = re.finditer(r'\$(\w*\b)', command_templ)
         for p in parameters:
