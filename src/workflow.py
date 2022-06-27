@@ -3,9 +3,10 @@ import subprocess
 from string import Template
 
 options = {
-    "PolygonClassStatistics": "-in $input_file -vec $true_obs -field  $fileid -out $output_file",
-    "SampleSelection": "-in $input_file -vec $true_obs -instats $classes_stats -field $fieldid -strategy $strategy -outrates $output_rates -out $output_sqlite",
-    "SampleExtraction": "-in $input_file -vec $true_obs -outfield prefix -outfiled.prefix.name band_ -field $field"
+    "PolygonClassStatistics": "-in $input_file -vec $vec -field  $fileid -out $output_file",
+    "SampleSelection": "-in $input_file -vec $vec -instats $classes_stats -field $fieldid -strategy $strategy -outrates $output_rates -out $output_sqlite",
+    "SampleExtraction": "-in $input_file -vec $vec -outfield prefix -outfield.prefix.name band_ -field $field",
+    "ComputeImageStatistics": "-il $input_file -out.xml $output_xml_file"
 "
 }
 
