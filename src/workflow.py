@@ -4,7 +4,9 @@ from string import Template
 
 options = {
     "PolygonClassStatistics": "-in $input_file -vec $true_obs -field  $fileid -out $output_file",
-    "SampleSelection": "-in $input_file -vec $true_obs -instats $classes_stats -field $fieldid -strategy $strategy -outrates $output_rates -out $output_sqlite"
+    "SampleSelection": "-in $input_file -vec $true_obs -instats $classes_stats -field $fieldid -strategy $strategy -outrates $output_rates -out $output_sqlite",
+    "SampleExtraction": "-in $input_file -vec $true_obs -outfield prefix -outfiled.prefix.name band_ -field $field"
+"
 }
 
 def select_command(method:str):
@@ -42,4 +44,4 @@ if __name__ == '__main__':
             parser_method.add_argument(p.group(1))
         
     args = parser.parse_args()
-    run_command(vars(args))
+    run_command(**vars(args))
