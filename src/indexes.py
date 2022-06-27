@@ -16,6 +16,9 @@ def calc_index(input_folder:str, index:str, ram:int, bucket:Union[str,None]=None
 
             index: str
                 Spectral index.
+            
+            ram: int, default: 256
+                Available memory for processing (in MB).
 
             bucket: str, default: None
                 GCP Bucket location URI for output file.
