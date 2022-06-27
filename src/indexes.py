@@ -7,7 +7,7 @@ from src.utils import save_path_in_bucket
 from src.indexes_definition import indexes
 
 
-def calc_index(input_folder:str, index:str, bucket:Union[str,None]=None, ram:int)->None:
+def calc_index(input_folder:str, index:str, ram:int, bucket:Union[str,None]=None)->None:
     '''
         Parameters
         ----------
