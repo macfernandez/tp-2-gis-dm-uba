@@ -12,6 +12,7 @@ python -m src.indexes input_folder [-i] [-b]
 - `input_folder`: carpeta que contiene subcarpetas con archivos `.tif`.
 - `-i`, `--index` (opcional): índices que se desean calcular. Puede ser cualquiera de los definidos en el archivo [indexes_definition.py](./indexes_definition.py)y puede indicarse más de uno. Si no se indica ninguno, calcula todos.
 - `-b`, `--bucket` (opcional): URI al bucket y carpeta donde se quiere guardar la capa generada. Ejemplo: `gs://my-bucket/folder/`. Si se indica un bucket, no se guarda en local. Si no se lo indica, la capa se guarda en local en la misma carpeta `input_folder` con un sufijo que indica el índica calculado.
+- `-r`, `--ram` (opcional): Memoria RAM en Mb disponible para realizar las particiones. A mayor RAM, menos particiones y mayor velocidad. Default: 256
 
 Ejemplos:
 
@@ -24,6 +25,11 @@ python -m src.indexes my-path -i NDVI NDSI -b gs://bucket/folder
 Calcula todos los índices y los guarda localmente.
 ```
 python -m src.indexes my-path
+```
+
+Calcula todos los índices y los guarda localmente usando particiones de 1 Gb.
+```
+python -m src.indexes my-path -r 1024
 ```
 
 ## concat_images.py
