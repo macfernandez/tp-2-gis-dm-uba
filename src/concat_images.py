@@ -41,7 +41,7 @@ def concatenate(input_folder:str, tile:str, index:str, output_folder:str, bucket
     images_otb = ' '.join(images)
     im_out_fname = f'{output_folder}/{tile}_{index.lower()}.tif'
     cmd = """bash -c 'source ~/OTB-8.0.1-Linux64/otbenv.profile;\
-        otbcli_ConcatenateImages -il {im} -out {im_out}'""".format(
+        otbcli_ConcatenateImages -il {im} -out {im_out} -ram {memoria}'""".format(
             im=images_otb, im_out=im_out_fname
     )
     subprocess.run(cmd, shell=True)
@@ -66,6 +66,7 @@ if __name__ == '__main__':
     parser.add_argument('--output_folder', '-o', type=str, default='results', help='Output folder. Default: results.')
     parser.add_argument('--index', '-i', choices=all_index, type=str, nargs='+', default=None, help='Index to calculate. If no one is set, all are calculated.')
     parser.add_argument('--bucket', '-b', default=None, type=str, help='Bucket blob for saving the output.')
+    parser.add_argument('--ram', '-r', default=256, type=int, help='Available memory for processing (in MB), default 256.')
     args = parser.parse_args()
 
     if not args.index:
