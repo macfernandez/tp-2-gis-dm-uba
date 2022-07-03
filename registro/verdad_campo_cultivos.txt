@@ -1,0 +1,23 @@
+INFO: Open of `data/verdad_campo/verdad_campo.shp'
+      using driver `ESRI Shapefile' successful.
+
+Layer name: verdad_campo
+Geometry: None
+Feature Count: 5
+Layer SRS WKT:
+(unknown)
+cultivo: String (10.0)
+OGRFeature(verdad_campo):0
+  cultivo (String) = MAIZ
+
+OGRFeature(verdad_campo):1
+  cultivo (String) = SOJA
+
+OGRFeature(verdad_campo):2
+  cultivo (String) = GIRASOL
+
+OGRFeature(verdad_campo):3
+  cultivo (String) = CAMPONATUR
+
+OGRFeature(verdad_campo):4
+  cultivo (String) = ALFALFA
