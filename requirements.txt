@@ -1,0 +1,3 @@
+jupyterlab
+nb-clean
+pre-commit
