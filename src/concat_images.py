@@ -7,7 +7,7 @@ from src.utils import save_file_in_bucket
 from src.indexes_definition import indexes
 
 
-def concatenate(input_folder:str, tile:str, index:str, output_folder:str, bucket:Union[str,None]=None)->None:
+def concatenate(input_folder:str, tile:str, index:str, output_folder:str, ram: int,  bucket:Union[str,None]=None)->None:
     '''
         Concatenate .tif files in input_folder's subfolders.
         Filter by tile and index and save the result in output_folder.
@@ -42,7 +42,7 @@ def concatenate(input_folder:str, tile:str, index:str, output_folder:str, bucket
     im_out_fname = f'{output_folder}/{tile}_{index.lower()}.tif'
     cmd = """bash -c 'source ~/OTB-8.0.1-Linux64/otbenv.profile;\
         otbcli_ConcatenateImages -il {im} -out {im_out} -ram {memoria}'""".format(
-            im=images_otb, im_out=im_out_fname
+            im=images_otb, im_out=im_out_fname, memoria = ram
     )
     subprocess.run(cmd, shell=True)
     if bucket:
@@ -76,4 +76,4 @@ if __name__ == '__main__':
         os.mkdir(args.output_folder)
         
     for i in args.index:
-        concatenate(args.input_folder, args.tile, i, args.output_folder, args.bucket)
+        concatenate(args.input_folder, args.tile, i, args.output_folder, args.ram,  args.bucket)
