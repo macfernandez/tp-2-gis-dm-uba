@@ -16,7 +16,7 @@ def calc_index(input_folder:str, index:str, ram:int, bucket:Union[str,None]=None
 
             index: str
                 Spectral index.
-            
+
             ram: int, default: 256
                 Available memory for processing (in MB).
 
@@ -29,12 +29,12 @@ def calc_index(input_folder:str, index:str, ram:int, bucket:Union[str,None]=None
             None
     '''
     images = glob(f'{input_folder}/*/*[0-9].tif')
-    
+
     for image in images:
         fname, ext = os.path.splitext(image)
         im_out_fname = '{im}_{index}.tif'.format(im=fname, index=index.lower())
         cmd = """bash -c 'source ~/OTB-8.0.1-Linux64/otbenv.profile; \
-        otbcli_BandMath -il {im} -out {im_out} -exp {form} -ram {memoria}'
+        otbcli_BandMath -il {im} -out {im_out} -exp "{form}" -ram {memoria}'
         """.format(im=image, im_out=im_out_fname, form=indexes.get(index), memoria = ram)
         subprocess.run(cmd, shell=True)
         if bucket:
@@ -44,7 +44,7 @@ def calc_index(input_folder:str, index:str, ram:int, bucket:Union[str,None]=None
 
 
 if __name__ == '__main__':
-    
+
     import argparse
 
     all_index = list(indexes.keys())
