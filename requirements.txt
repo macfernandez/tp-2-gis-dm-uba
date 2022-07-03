@@ -1,3 +1,5 @@
 jupyterlab
 nb-clean
+pandas
 pre-commit
+rasterio
