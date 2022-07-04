@@ -1,6 +1,7 @@
 # data
 data/
 images/
+model/
 results/
 
 # Byte-compiled / optimized / DLL files
