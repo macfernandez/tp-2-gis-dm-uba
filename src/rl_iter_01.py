@@ -48,7 +48,8 @@ def train_rl_model(df:pd.DataFrame)->str:
     model = LogisticRegression(
         random_state=20220707,
         multi_class='multinomial',
-        max_iter=300
+        max_iter=300,
+        n_jobs=-1
     )
 
     os.makedirs('model', exist_ok=True)
