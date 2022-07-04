@@ -67,8 +67,8 @@ def train_rl_model(df:pd.DataFrame)->str:
 def make_prediction(model_path:str, data_folder:str)->None:
     model = joblib.load(model_path)
 
-    os.makedirs('../predictions/', exist_ok=True)
-    tif_files = glob('../data/concat/*')
+    os.makedirs('predictions/', exist_ok=True)
+    tif_files = glob(f'{data_folder}/*')
 
     for tile in tif_files:
         width, height, transform = metadata_from_tile(tile)
@@ -78,7 +78,7 @@ def make_prediction(model_path:str, data_folder:str)->None:
             img_df = create_windowed_dataset(tile, window)
             res = model.predict_proba(img_df).astype(np.float64)
             preds = np.append(preds, res, axis = 0)
-        with open(f'../predictions/{tile}.npy', 'wb') as f:
+        with open(f'predictions/{tile}.npy', 'wb') as f:
             np.save(f, preds)
             print(f'Prediction for {tile} already made.')
 
@@ -88,12 +88,12 @@ if __name__ == '__main__':
     import argparse
 
     parser = argparse.ArgumentParser()
-    parser.add_argument('sqlite-folder', help='Folder with extraced .sqlite for training.')
-    parser.add_argument('tif-folder', help='Folder with concated .tif for training.')
+    parser.add_argument('sqlite_folder', help='Folder with extraced .sqlite for training.')
+    parser.add_argument('tif_folder', help='Folder with concated .tif for training.')
     args = parser.parse_args()
 
     training = load_dataset(args.sqlite_folder)
     _ = count_target_values(training, 'cultivo')
     model_path = train_rl_model(training)
     make_prediction(model_path, args.tif_folder)
-    
+
