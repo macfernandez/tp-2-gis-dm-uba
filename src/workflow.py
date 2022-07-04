@@ -40,6 +40,9 @@ for f in files:
         ram=args.ram
     )
 
+    print(f'\n*** PolygonClassStatistics\n==> OUTPUT SAVED IN:')
+    print(f'\t- {output_file_polygon}\n')
+
     # SampleSelection
     print('***************************')
     print('***** SampleSelection *****')
@@ -66,6 +69,10 @@ for f in files:
         ram=args.ram
     )
 
+    print(f'\n*** SampleSelection\n==> OUTPUT SAVED IN:')
+    print(f'\t- {output_selection_rates}\n')
+    print(f'\t- {output_selection_samples}\n')
+
     # SampleExtraction
     print('****************************')
     print('***** SampleExtraction *****')
@@ -77,3 +84,6 @@ for f in files:
         field='id',
         ram=args.ram
     )
+
+    print(f'\n*** SampleExtraction\n==> OUTPUT SAVED IN:')
+    print(f'\t- {output_selection_samples}\n')
