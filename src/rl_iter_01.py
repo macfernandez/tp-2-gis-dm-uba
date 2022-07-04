@@ -80,9 +80,9 @@ def make_prediction(model_path:str, data_folder:str)->None:
             res = model.predict_proba(img_df).astype(np.float64)
             preds = np.append(preds, res, axis = 0)
         tile_name = os.path.basename(tile).replace('.tif','').strip()
-        with open(f'predictions/{tile}.npy', 'wb') as f:
+        with open(f'predictions/{tile_name}.npy', 'wb') as f:
             np.save(f, preds)
-            print(f'Prediction for {tile} already made.')
+            print(f'Prediction for {tile_name} already made.')
 
 
 if __name__ == '__main__':
