@@ -68,14 +68,14 @@ Luego, concateno los archivos de todos los índices
 bash -c 'source ~/OTB-8.0.1-Linux64/otbenv.profile;\
 otbcli_ConcatenateImages \
 -il results/00000_ndvi.tif results/00000_ndsi.tif \
--out results/00000_concated.tif -ram 500'
+-out data/concat/00000_concated.tif -ram 500'
 ```
 
 ```
 bash -c 'source ~/OTB-8.0.1-Linux64/otbenv.profile;\
 otbcli_ConcatenateImages \
 -il results/12544_ndvi.tif results/12544_ndsi.tif \
--out results/12544_concated.tif -ram 500'
+-out data/concat/12544_concated.tif -ram 500'
 ```
 
 ## Selección de pixeles para entrenamiento
@@ -146,7 +146,7 @@ data/selection/12544_samples.sqlite \
 id 1000
 ```
 
-## Entrenamiento
+## Entrenamiento - Iteración #01
 
 Entreno una Regresión Logística básica con la verdad de campo y
 hago las predicciones sobre el dataset completo:
@@ -161,3 +161,16 @@ python -m src.rl_iter_01 sqlite-folder tif-folder
 Si los _tiles_ ya fueron _mergeados_, dichas carpetas deberían tener un solo archivo
 que reúna los pixeles de los dos _tiles_. Si todavía no se realizó el _mergeo_, cada
 carpeta contendrá dos archivos, uno por _tile_.
+
+## [TO-DO] Análisis - Iteración #01
+
+Analizar las probabilidades predichas en el apartado anterior y definir un punto de
+corte.
+Evaluar si conviene o no recortar variables (esto se podría analizar considerando los
+coeficientes, quizás).
+
+## [TO-DO] Realizar el etiquetado continuo
+
+## [TO-DO] Análisis de cómo se fue modificando la verdad de campo en las iteraciones
+
+## [TO-DO] Rehacer los pasos de la bitácora con la nueva verdad de campo

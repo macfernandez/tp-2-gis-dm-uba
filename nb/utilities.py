@@ -20,15 +20,17 @@ def sliding_windows(size, step_size, width, height, whole=False):
             real_h = h if whole else min(h, abs(height - i))
             yield Window(j, i, real_w, real_h), (pos_i, pos_j)
             
-def create_windowed_dataset(in_raster, window):
+def create_windowed_dataset(tile, window):
     img_df = pd.DataFrame()
-    src = rasterio.open(in_raster)
+    src = rasterio.open(tile)
     img = src.read(window=window)
     r,m,n = img.shape
-    img_df = pd.DataFrame(img.reshape(r,m*n)).T
-    img_df.rename(
-        columns={col:f'band_{col+1}' for col in img_df.columns},
-        inplace=True
+    img_df = (
+        pd
+        .DataFrame(img.reshape(r,m*n))
+        .T
+        .replace([np.inf, -np.inf], np.nan)
+        .fillna(-99)
+        .to_numpy()
     )
-    img_df = img_df.replace([np.inf, -np.inf], np.nan).fillna(-99)
-    return(img_df)
+    return img_df

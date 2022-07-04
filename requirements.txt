@@ -1,8 +1,11 @@
+ipywidgets
 jupyterlab
 nb-clean
 pandas
+pandas-profiling
 pre-commit
 pyproj
 rasterio
 scikit-learn
 tqdm
+widgetsnbextension
