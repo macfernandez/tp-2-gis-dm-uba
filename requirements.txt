@@ -2,5 +2,7 @@ jupyterlab
 nb-clean
 pandas
 pre-commit
+pyproj
 rasterio
 scikit-learn
+tqdm
