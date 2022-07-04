@@ -35,5 +35,6 @@ indexes = {
     "SIWSI":"(im1b5-im1b6)/(im1b5+im1b6)",
     "SLAVI":"im1b4/(im1b3+im1b7)",
     "VARI_green":"(im1b2-im1b3)/(im1b2+im1b3-im1b1)",
-    "WDRI":"(0.1*im1b4-im1b3)/(0.1*im1b4+im1b3)"
+    "WDRI":"(0.1*im1b4-im1b3)/(0.1*im1b4+im1b3)",
+    "CEROS":"0"
 }
