@@ -74,10 +74,12 @@ def make_prediction(model_path:str, data_folder:str)->None:
         width, height, transform = metadata_from_tile(tile)
         windows = sliding_windows(100, 100, width, height)
         preds = np.empty((10000,7))
-        for window, _ in tqdm(windows):
+        windows =list(windows) 
+        for window,_ in tqdm(windows, total=len(windows)):
             img_df = create_windowed_dataset(tile, window)
             res = model.predict_proba(img_df).astype(np.float64)
             preds = np.append(preds, res, axis = 0)
+        tile_name = os.path.basename(tile).replace('.tif','').strip()
         with open(f'predictions/{tile}.npy', 'wb') as f:
             np.save(f, preds)
             print(f'Prediction for {tile} already made.')
