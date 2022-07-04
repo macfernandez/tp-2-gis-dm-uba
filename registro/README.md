@@ -155,5 +155,9 @@ hago las predicciones sobre el dataset completo:
 python -m src.rl_iter_01 sqlite-folder tif-folder
 ```
 
-- sqlite-folder: 
-- tif-folder:
+- sqlite-folder: carpeta con archivos `.sqlite` para armar conjunto de entrenamiento.
+- tif-folder: carpeta con archivos `.tif` para armar conjunto de predicción.
+
+Si los _tiles_ ya fueron _mergeados_, dichas carpetas deberían tener un solo archivo
+que reúna los pixeles de los dos _tiles_. Si todavía no se realizó el _mergeo_, cada
+carpeta contendrá dos archivos, uno por _tile_.
