@@ -90,6 +90,7 @@ data/concat/00000_concated.tif \
 data/verdad_campo/verdad_campo.shp \
 id \
 data/polygonclass/00000_classes_stats.xml
+1000
 ```
 
 ```
@@ -98,6 +99,7 @@ data/concat/12544_concated.tif \
 data/verdad_campo/verdad_campo.shp \
 id \
 data/polygonclass/12544_classes_stats.xml
+1000
 ```
 
 Con `SampleSelection` selecciono qué pixeles de cada clase voy a usar para
@@ -112,7 +114,8 @@ data/polygonclass/00000_classes_stats.xml \
 id \
 total \
 data/selection/00000_rates.csv \
-data/selection/00000_samples.sqlite
+data/selection/00000_samples.sqlite \
+1000
 ```
 
 ```
@@ -123,22 +126,34 @@ data/polygonclass/12544_classes_stats.xml \
 id \
 total \
 data/selection/12544_rates.csv \
-data/selection/12544_samples.sqlite
+data/selection/12544_samples.sqlite \
+1000
 ```
 
-Con `SampleSelection` extraigo los pixeles seleccionados previamente.
+Con `SampleExtraction` extraigo los pixeles seleccionados previamente.
+
 ```
 python -m src.workflow SampleExtraction \
 data/concat/00000_concated.tif \
 data/selection/00000_samples.sqlite \
-id
+id 1000
 ```
 
-## Unión de los _raster_
+```
+python -m src.workflow SampleExtraction \
+data/concat/12544_concated.tif \
+data/selection/12544_samples.sqlite \
+id 1000
+```
 
-Uno los _rasters_ concatenados para tener una única imagen del terreno:
+## Entrenamiento
+
+Entreno una Regresión Logística básica con la verdad de campo y
+hago las predicciones sobre el dataset completo:
 
 ```
-gdal_merge.py -ot UInt32 -o results/merge_tmp.tif \
-results/00000_concated.tif results/12544_concated.tif
+python -m src.rl_iter_01 sqlite-folder tif-folder
 ```
+
+- sqlite-folder: 
+- tif-folder:
