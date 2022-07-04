@@ -47,7 +47,8 @@ def train_rl_model(df:pd.DataFrame)->str:
 
     model = RandomForestClassifier(
         random_state=20220707,
-        max_depth=100,
+        n_estimators=500,
+        max_depth=10,
         n_jobs=-1,
         verbose=1
     )
@@ -60,7 +61,6 @@ def train_rl_model(df:pd.DataFrame)->str:
 
     with open('../model/randomforest_feature_impotances.txt','w') as f:
         _=f.writelines([f'{i}\n' for i in model.feature_importances_.tolist()])
-
 
     output_file = 'model/randomforest_iter_01.joblib'
     _ = joblib.dump(model,'model/randomforest_iter_01.joblib')
@@ -85,7 +85,7 @@ def make_prediction(model_path:str, data_folder:str)->None:
             res = model.predict_proba(img_df).astype(np.float64)
             preds = np.append(preds, res, axis = 0)
         tile_name = os.path.basename(tile).replace('.tif','').strip()
-        with open(f'predictions/{tile_name}.npy', 'wb') as f:
+        with open(f'predictions/randomforest_{tile_name}.npy', 'wb') as f:
             np.save(f, preds)
             print(f'Prediction for {tile_name} already made.')
 
