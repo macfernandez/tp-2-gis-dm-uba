@@ -84,67 +84,23 @@ Para cada _tile_, obtengo las estadísticas resumidas con
 `PolygonClassStatistics`. Eso genera un archivo `.xml.`
 con la cantidad de pixeles que hay en cada clase.
 
-```
-python -m src.workflow PolygonClassStatistics \
-data/concat/00000_concated.tif \
-data/verdad_campo/verdad_campo.shp \
-id \
-data/polygonclass/00000_classes_stats.xml
-1000
-```
-
-```
-python -m src.workflow PolygonClassStatistics \
-data/concat/12544_concated.tif \
-data/verdad_campo/verdad_campo.shp \
-id \
-data/polygonclass/12544_classes_stats.xml
-1000
-```
-
 Con `SampleSelection` selecciono qué pixeles de cada clase voy a usar para
 entrenar. Eso devuelve un archivo `.sqlite`. Ahí, cada pixel es un punto de
 las posiciones.
 
-```
-python -m src.workflow SampleSelection \
-data/concat/00000_concated.tif \
-data/verdad_campo/verdad_campo.shp \
-data/polygonclass/00000_classes_stats.xml \
-id \
-total \
-data/selection/00000_rates.csv \
-data/selection/00000_samples.sqlite \
-1000
-```
-
-```
-python -m src.workflow SampleSelection \
-data/concat/12544_concated.tif \
-data/verdad_campo/verdad_campo.shp \
-data/polygonclass/12544_classes_stats.xml \
-id \
-total \
-data/selection/12544_rates.csv \
-data/selection/12544_samples.sqlite \
-1000
-```
-
 Con `SampleExtraction` extraigo los pixeles seleccionados previamente.
 
 ```
-python -m src.workflow SampleExtraction \
-data/concat/00000_concated.tif \
-data/selection/00000_samples.sqlite \
-id 1000
+python -m src.workflow concat_folder verdad_campo [--ram]
 ```
 
-```
-python -m src.workflow SampleExtraction \
-data/concat/12544_concated.tif \
-data/selection/12544_samples.sqlite \
-id 1000
-```
+- `concat_folder`: carpeta donde se encuentran los archivos concatenados.
+Debe tener solo esos archivos. Si los _tiles_ ya fueron _mergeados_, tendrá
+un solo archivo de todo el territorio y, si no, tendrá dos archivos, uno por
+cada _tile_.
+- `verdad_campo`: carpeta donde se encuentra la verdad de campo.
+- `ram`: opcionalmente, se puede indicar la RAM a usar en todos los comandos.
+Por defecto utiliza 1Gb.
 
 ## Entrenamiento - Iteración #01
 

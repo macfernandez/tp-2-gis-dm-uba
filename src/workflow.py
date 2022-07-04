@@ -1,47 +1,79 @@
+import os
 import re
-import subprocess
-from string import Template
+import argparse
 
-options = {
-    "PolygonClassStatistics": "-in $input_file -vec $vec -field  $fileid -out $output_file -ram $ram",
-    "SampleSelection": "-in $input_file -vec $vec -instats $classes_stats -field $fieldid -strategy $strategy -outrates $output_rates -out $output_sqlite -ram $ram",
-    "SampleExtraction": "-in $input_file -vec $vec -outfield prefix -outfield.prefix.name band_ -field $field -ram $ram",
-    "ComputeImagesStatistics": "-il $input_file -out.xml $output_xml_file -ram $ram"
-}
+from src.obtcli_command import run_command
 
-def select_command(method:str):
-    settings_templ = options.get(method)
-    cmd = f"""
-    bash -c 'source ~/OTB-8.0.1-Linux64/otbenv.profile;
-    otbcli_{method} {settings_templ}'
-    """
-    return cmd
+parser = argparse.ArgumentParser()
+parser.add_argument('concat_folder', help='Folder with (only) concat files. If there is more than one concat file (one per tile), make the workflow for all of them.')
+parser.add_argument('verdad_campo', help='Folder with true labels.')
+parser.add_argument('--ram', '-r', default=1000, help='Ram. Default: 1000.')
+args = parser.parse_args()
 
-def run_command(**kwargs):
-    method = kwargs.get('method')
-    command_templ = select_command(method)
-    command = Template(command_templ).safe_substitute(**kwargs)
-    subprocess.run(command, shell=True)
+root_folder = args.concat_folder.split('/')[0]
+verdad_campo_folder = args.verdad_campo.strip('/')
+verdad_campo_file = os.path.join(verdad_campo_folder,'verdad_campo.shp')
 
+files = os.listdir(args.concat_folder)
 
-if __name__ == '__main__':
+for f in files:
+    file_path = os.path.join(args.concat_folder, f)
 
-    import argparse
+    file_id = re.search(r'\d+',f).group()
 
-    parser = argparse.ArgumentParser()
-    subparsers = parser.add_subparsers(dest='method', description='Método a ejecutar.')
+    # PolygonClassStatistics
+    print('**********************************')
+    print('***** PolygonClassStatistics *****')
+    print('**********************************')
+    output_polygon = os.path.join(root_folder,'polygonclass')
+    os.makedirs(output_polygon, exist_ok=True)
+    output_file_polygon = os.path.join(
+        output_polygon,
+        f'{file_id}_classes_stats.xml'
+    )
+    run_command(
+        method='PolygonClassStatistics',
+        input_file=file_path,
+        vec=verdad_campo_file,
+        field='id',
+        output_file=output_file_polygon,
+        ram=args.ram
+    )
 
-    for method, command in options.items():
+    # SampleSelection
+    print('***************************')
+    print('***** SampleSelection *****')
+    print('***************************')
+    output_selection = os.path.join(root_folder,'selection')
+    os.makedirs(output_selection, exist_ok=True)
+    output_selection_rates = os.path.join(
+        output_selection,
+        f'{file_id}_rates.csv'
+    )
+    output_selection_samples = os.path.join(
+        output_selection,
+        f'{file_id}_sample.sqlite'
+    )
+    run_command(
+        method='SampleSelection',
+        input_file=file_path,
+        vec=verdad_campo_file,
+        classes_stats=output_file_polygon,
+        field='id',
+        strategy='total',
+        output_rates=output_selection_rates,
+        output_sqlite=output_selection_samples,
+        ram=args.ram
+    )
 
-        command_templ = select_command(method)
-        parser_method = subparsers.add_parser(
-            method,
-            help=f'Ejecuta el método {method}',
-            description=f'Genera el comando {command_templ} con los reemplazos indicados (respetar el orden).'
-        )
-        parameters = re.finditer(r'\$(\w*\b)', command_templ)
-        for p in parameters:
-            parser_method.add_argument(p.group(1))
-        
-    args = parser.parse_args()
-    run_command(**vars(args))
+    # SampleExtraction
+    print('****************************')
+    print('***** SampleExtraction *****')
+    print('****************************')
+    run_command(
+        method='SampleExtraction',
+        input_file=file_path,
+        vec=output_selection_samples,
+        field='id',
+        ram=args.ram
+    )
