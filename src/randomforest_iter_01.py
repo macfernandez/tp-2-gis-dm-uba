@@ -7,6 +7,7 @@ import joblib
 import numpy as np
 import pandas as pd
 from glob import glob
+from tqdm import tqdm
 from pyproj import CRS
 from sqlite3 import connect
 from sklearn.ensemble import RandomForestClassifier
@@ -79,7 +80,7 @@ def make_prediction(model_path:str, data_folder:str)->None:
         windows = sliding_windows(100, 100, width, height)
         preds = np.empty((10000,7))
         windows =list(windows) 
-        for window,_ in windows:
+        for window,_ in tqdm(windows, total=len(windows)):
             img_df = create_windowed_dataset(tile, window)
             res = model.predict_proba(img_df).astype(np.float64)
             preds = np.append(preds, res, axis = 0)
