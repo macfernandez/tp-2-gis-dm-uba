@@ -11,6 +11,7 @@ parser.add_argument('--ram', '-r', default=1000, help='Ram. Default: 1000.')
 args = parser.parse_args()
 
 root_folder = args.concat_folder.split('/')[0]
+vec_sepec = os.path.splitext(os.path.basename(args.vec_shp))[0]
 
 files = os.listdir(args.concat_folder)
 
@@ -23,7 +24,7 @@ for f in files:
     print('**********************************')
     print('***** PolygonClassStatistics *****')
     print('**********************************')
-    output_polygon = os.path.join(root_folder,'polygonclass')
+    output_polygon = os.path.join(root_folder,f'polygonclass_{vec_sepec}')
     os.makedirs(output_polygon, exist_ok=True)
     output_file_polygon = os.path.join(
         output_polygon,
@@ -45,7 +46,7 @@ for f in files:
     print('***************************')
     print('***** SampleSelection *****')
     print('***************************')
-    output_selection = os.path.join(root_folder,'selection')
+    output_selection = os.path.join(root_folder,f'selection_{vec_sepec}')
     os.makedirs(output_selection, exist_ok=True)
     output_selection_rates = os.path.join(
         output_selection,
