@@ -7,7 +7,9 @@ import argparse
 import numpy as np
 import pandas as pd
 from glob import glob
+import seaborn as sns
 from sqlite3 import connect
+import matplotlib.pyplot as plt
     
     
 parser = argparse.ArgumentParser()
@@ -60,6 +62,27 @@ min_score = true_preds.pred_score.min()
 minscore_file_path = os.path.join(output_folder,'randomforest_minscore_train.npy')
 with open(minscore_file_path, 'wb') as f:
     np.save(f, min_score)
+
+# ----- CUTOFF
+
+fig_file_path = os.path.join(output_folder,'randomforest_train_cutoff.png')
+
+cutt_off = []
+samples = []
+for i in np.linspace(0,1,20):
+    data['mask'] = data.pred_score.apply(lambda x: True if x>1-i else False)
+    cantidades = data[(data.id==data.pred_class) & (data['mask']==True)].shape[0]
+    cutt_off.append(i)
+    samples.append(cantidades)
+
+
+sns.set_style('whitegrid')
+fig, ax = plt.subplots(figsize=(6,4))
+sns.lineplot(x=cutt_off, y=samples)
+plt.xlabel('Cut-off')
+plt.ylabel('Samples')
+plt.title('Cut-off vs. Samples', fontsize=18)
+plt.savefig(fig_file_path)
 
 
 print(f'\n{len(true_preds)}/{len(data)} pixeles fueron correctamente predichos.')
