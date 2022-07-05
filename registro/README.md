@@ -128,6 +128,19 @@ corte.
 Evaluar si conviene o no recortar variables (esto se podría analizar considerando los
 coeficientes, quizás).
 
+```
+gdal_translate -b 185 -b 95 -b 36 -b 65 -b 119 -b 48 -b 23 -b 35 -b 96 \
+-b 29 -b 107 -b 142 -b 191 -b 59 -b 77 -b 42 -b 71 -b 149 -b 66 -b 113 -b 210 \
+-b 173 -b 83 -b 215 -b 179 -b 208 -b 120 -b 17 \
+data/concat/00000.tif data/concat/importance_00000.tif
+```
+```
+gdal_translate -b 185 -b 95 -b 36 -b 65 -b 119 -b 48 -b 23 -b 35 -b 96 \
+-b 29 -b 107 -b 142 -b 191 -b 59 -b 77 -b 42 -b 71 -b 149 -b 66 -b 113 -b 210 \
+-b 173 -b 83 -b 215 -b 179 -b 208 -b 120 -b 17 \
+data/concat/12544.tif data/concat/importance_12544.tif
+```
+
 ## Levantar dataset de test a Python
 
 Buscamos poder levantar el (o los) _tile(s)_ con todas las bandas
