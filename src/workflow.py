@@ -7,11 +7,12 @@ from src.obtcli_command import run_command
 parser = argparse.ArgumentParser()
 parser.add_argument('concat_folder', help='Folder with (only) concat files. If there is more than one concat file (one per tile), make the workflow for all of them.')
 parser.add_argument('vec_shp', help='Path to file with labels.')
+parser.add_argument('field', choices=['id','DN'], help='Column name with label for sample selection and extraction.')
 parser.add_argument('--ram', '-r', default=1000, help='Ram. Default: 1000.')
 args = parser.parse_args()
 
 root_folder = args.concat_folder.split('/')[0]
-vec_sepec = os.path.splitext(os.path.basename(args.vec_shp))[0]
+vec_spec = os.path.splitext(os.path.basename(args.vec_shp))[0]
 
 files = os.listdir(args.concat_folder)
 
@@ -24,7 +25,7 @@ for f in files:
     print('**********************************')
     print('***** PolygonClassStatistics *****')
     print('**********************************')
-    output_polygon = os.path.join(root_folder,f'polygonclass_{vec_sepec}')
+    output_polygon = os.path.join(root_folder,f'polygonclass_{vec_spec}')
     os.makedirs(output_polygon, exist_ok=True)
     output_file_polygon = os.path.join(
         output_polygon,
@@ -34,7 +35,7 @@ for f in files:
         method='PolygonClassStatistics',
         input_file=file_path,
         vec=args.vec_shp,
-        field='id',
+        field=args.field,
         output_file=output_file_polygon,
         ram=args.ram
     )
@@ -46,7 +47,7 @@ for f in files:
     print('***************************')
     print('***** SampleSelection *****')
     print('***************************')
-    output_selection = os.path.join(root_folder,f'selection_{vec_sepec}')
+    output_selection = os.path.join(root_folder,f'selection_{vec_spec}')
     os.makedirs(output_selection, exist_ok=True)
     output_selection_rates = os.path.join(
         output_selection,
@@ -61,7 +62,7 @@ for f in files:
         input_file=file_path,
         vec=args.vec_shp,
         classes_stats=output_file_polygon,
-        field='id',
+        field=args.field,
         strategy='total',
         output_rates=output_selection_rates,
         output_sqlite=output_selection_samples,
@@ -80,7 +81,7 @@ for f in files:
         method='SampleExtraction',
         input_file=file_path,
         vec=output_selection_samples,
-        field='id',
+        field=args.field,
         ram=args.ram
     )
 

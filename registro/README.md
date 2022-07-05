@@ -91,7 +91,7 @@ las posiciones.
 Con `SampleExtraction` extraigo los pixeles seleccionados previamente.
 
 ```
-python -m src.workflow concat_folder verdad_campo/verdad_campo.shp [--ram]
+python -m src.workflow concat_folder verdad_campo/verdad_campo.shp field [--ram]
 ```
 
 - `concat_folder`: carpeta donde se encuentran los archivos concatenados.
@@ -99,6 +99,8 @@ Debe tener solo esos archivos. Si los _tiles_ ya fueron _mergeados_, tendrá
 un solo archivo de todo el territorio y, si no, tendrá dos archivos, uno por
 cada _tile_.
 - `vec_shp`: path al archivo `.shp` con el que se reccortará la imagen.
+- `field`: nombre de la columna en la que se encuentran las labels en el archivo
+`vec_shp`. Para el archivo `verdad_campo.shp`, esta columna es _id_.
 - `ram`: opcionalmente, se puede indicar la RAM a usar en todos los comandos.
 Por defecto utiliza 1Gb.
 
@@ -154,7 +156,7 @@ Los pasos siguientes son repetir el `src.workflow` reemplazando
 `verdad_campo.shp` por `mask_agri_aoi.shp`.
 
 ```
-python -m src.workflow concat_folder mask_agri_aoi.shp [--ram]
+python -m src.workflow concat_folder mask_agri_aoi.shp DN [--ram]
 ```
 
 Se obtiene el `.sqlite` que abarca toda la zona cultivable, con
