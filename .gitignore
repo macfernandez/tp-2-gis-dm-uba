@@ -2,6 +2,7 @@
 data/
 images/
 model/
+predictions/
 results/
 
 # Byte-compiled / optimized / DLL files
