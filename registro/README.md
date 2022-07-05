@@ -126,6 +126,27 @@ corte.
 Evaluar si conviene o no recortar variables (esto se podría analizar considerando los
 coeficientes, quizás).
 
+## Levantar dataset de test a Python
+Buscamos poder levantar el (o los) _tile(s)_ con todas las bandas a Python a fin de tenerlos como dataframe y facilitar las iteraciones de los modelos. Inspirándonos en los pasos del `src.workflow`, necesitamos una capa _.shp_ que abarque toda la zona de estudio y reemplace a `verdad_campo.shp`. Esto generaría un `.sqlite` con todos los pixeles del _tile_. Sin embargo, no es necesario levantar todo el _tile_, solamente el área cultivable. Por eso, usamos la máscara compartida por Bayle que delimita las zonas cultivables. Por lo que en primer lugar se descarga la máscara:
+
+```
+wget https://storage.googleapis.com/gis2022-teledeteccion/clase12/mask/mask_agri_aoi.tif
+```
+
+Siendo que esta máscara es un raster cuyos valores son 1 o nan (siendo _1 --> área cultivable_), es necesario vectorizarlo, obteniendo un archivo `.shp` con polígonos cuyo único atributo tendrá el valor _1_.
+
+```
+gdal_polygonize.py mask_agri_aoi.tif mask_agri_aoi.shp
+```
+
+Los pasos siguientes son repetir el `src.workflow` reemplazando `verdad_campo.shp` por `mask_agri_aoi.shp`.
+
+```
+python -m src.workflow concat_folder mask_agri_aoi [--ram]
+```
+
+Se obtiene el `.sqlite` que abarca toda la zona cultivable, con la etiqueta `1`.
+
 ## [TO-DO] Realizar el etiquetado continuo
 
 ## [TO-DO] Análisis de cómo se fue modificando la verdad de campo en las iteraciones
