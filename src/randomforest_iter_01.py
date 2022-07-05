@@ -7,7 +7,6 @@ import joblib
 import numpy as np
 import pandas as pd
 from glob import glob
-from tqdm import tqdm
 from pyproj import CRS
 from sqlite3 import connect
 from sklearn.ensemble import RandomForestClassifier
@@ -59,7 +58,7 @@ def train_rl_model(df:pd.DataFrame)->str:
 
     model.fit(X, y)
 
-    with open('../model/randomforest_feature_impotances.txt','w') as f:
+    with open('model/randomforest_feature_impotances.txt','w') as f:
         _=f.writelines([f'{i}\n' for i in model.feature_importances_.tolist()])
 
     output_file = 'model/randomforest_iter_01.joblib'
@@ -80,7 +79,7 @@ def make_prediction(model_path:str, data_folder:str)->None:
         windows = sliding_windows(100, 100, width, height)
         preds = np.empty((10000,7))
         windows =list(windows) 
-        for window,_ in tqdm(windows, total=len(windows)):
+        for window,_ in windows:
             img_df = create_windowed_dataset(tile, window)
             res = model.predict_proba(img_df).astype(np.float64)
             preds = np.append(preds, res, axis = 0)
