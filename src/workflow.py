@@ -6,13 +6,11 @@ from src.obtcli_command import run_command
 
 parser = argparse.ArgumentParser()
 parser.add_argument('concat_folder', help='Folder with (only) concat files. If there is more than one concat file (one per tile), make the workflow for all of them.')
-parser.add_argument('verdad_campo', help='Folder with true labels.')
+parser.add_argument('vec_shp', help='Path to file with labels.')
 parser.add_argument('--ram', '-r', default=1000, help='Ram. Default: 1000.')
 args = parser.parse_args()
 
 root_folder = args.concat_folder.split('/')[0]
-verdad_campo_folder = args.verdad_campo.strip('/')
-verdad_campo_file = os.path.join(verdad_campo_folder,'verdad_campo.shp')
 
 files = os.listdir(args.concat_folder)
 
@@ -34,7 +32,7 @@ for f in files:
     run_command(
         method='PolygonClassStatistics',
         input_file=file_path,
-        vec=verdad_campo_file,
+        vec=args.vec_shp,
         field='id',
         output_file=output_file_polygon,
         ram=args.ram
@@ -60,7 +58,7 @@ for f in files:
     run_command(
         method='SampleSelection',
         input_file=file_path,
-        vec=verdad_campo_file,
+        vec=args.vec_shp,
         classes_stats=output_file_polygon,
         field='id',
         strategy='total',
