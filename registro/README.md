@@ -121,12 +121,19 @@ que reúna los pixeles de los dos _tiles_. Si todavía no se realizó el _mergeo
 carpeta contendrá dos archivos, uno por _tile_.
 
 Esto también puede verse en [esta notebook](../nb/modelo_sklearn.ipynb).
-## [TO-DO] Análisis - Iteración #01
+## Análisis - Iteración #01
 
-Analizar las probabilidades predichas en el apartado anterior y definir un punto de
-corte.
-Evaluar si conviene o no recortar variables (esto se podría analizar considerando los
-coeficientes, quizás).
+Entrenamos un modelo con los 222 índices y realizamos las predicciones sobre el
+set de entrenamiento. Luego, la cantidad de pixeles que fueron un acierto en relación
+con cada punto de corte posible (en rangos de 0.1).
+De estos puntos, se observó que 0.4 mostraba un cambio considerable respecto de la
+cantidad de aciertos del modelo. Se toma ese punto como corte para considerar una
+predicción de confianza.
+
+Además, se analizó la importancia de cada índice, y se seleccionaron aquello cuya
+importancia superaba el 0.1
+
+Se recortaron tales bandas:
 
 ```
 gdal_translate -b 185 -b 95 -b 36 -b 65 -b 119 -b 48 -b 23 -b 35 -b 96 \

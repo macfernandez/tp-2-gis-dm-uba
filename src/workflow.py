@@ -81,7 +81,7 @@ for f in files:
         method='SampleExtraction',
         input_file=file_path,
         vec=output_selection_samples,
-        field=args.field,
+        field=args.field.lower(),
         ram=args.ram
     )
 
