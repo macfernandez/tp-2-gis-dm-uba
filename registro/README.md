@@ -186,9 +186,9 @@ la etiqueta `1`.
 
 Para este paso, NO IMPORTA QUÉ HAYAS HECHO ANTES, hacé lo siguiente.
 
-Descarga los .sqlite de verdad de campo (te va a servir para entrenar el modelo)
-y de mask_agri_aoi (es el .tif con las bandas pero recortado con los polígonos
-de la zona cultivable y guardado en formato .sqlite) tal como se indica a continuación:
+Descarga los `.sqlite` de verdad de campo (te va a servir para entrenar el modelo)
+y de mask_agri_aoi (es el `.tif` con las bandas pero recortado con los polígonos
+de la zona cultivable y guardado en formato `.sqlite`) tal como se indica a continuación:
 
 ```
 gsutil -m cp -r gs://gis-obt/selection_verdad_campo data/
@@ -203,8 +203,30 @@ Lo importante es que no descargues los archivos que están en `selection_verdad_
 `selection_mask_agri_aoi` al mismo lugar porque tienen el mismo nombre y se van a pisar.
 
 Con eso, hacete un pull del repo en la rama `model/random_forest`. En la carpeta `nb` hay una
-notebook llamada [randomforest_iterations](../nb)
+notebook llamada [randomforest_iterations](../nb/randomforest_iterations.ipynb) que tiene el
+código para entrenar el modelo a partir de la verdad de campo y predecir en el dataset de mask_agri.
+Y esto lo hace ya todo con las 28 bandas del feature_imporance.
+
+**Algo importante a tener en cuenta** es que hay que cambiar el `threshold` para que corte
+el modelo. Yo lo dejés en `.95` que es bastante alto pero porque estaba probando (ni siquiera tenía los
+`.sqlite` buenos además). Habría que dejar en ese threshold, o bien el valor del _cut off_ (`.4`), o
+bien el valor de la mínima predicción acertada que hizo el modelo sobre el conjunto de 
+entrenaminto entrenado con todas las bandas (esto quedó a confirmar por Fede).
+
+La _notebook_ antes mencionada guarda, para cada iteración:
+
+- el modelo entrenado
+- las probabilidades para cada pixel para cada clase
+- un `.csv` que indica con cuántos pixeles se entrenó el modelo de esa iteración, cuántas predicciones superaron el threshold
+(y, como consecuencia, van a ser incluidas en el entrenamiento de la siguiente iteración) y cuántas predicciones no lo superaron
+
+Además, en la últma iteración, guarda un `.csv` con los datos finales. En ese `.csv` están tanto los pixeles de verdad de campo
+(que, en la columna `pred_class` van a tener el valor *vc_original*) como los que se fueron agregando porque el modelo predijo
+su pertenencia a cierta clase con un una probabilidad superior a la indicada en nuestro umbral.
 
 ## [TO-DO] Análisis de cómo se fue modificando la verdad de campo en las iteraciones
 
+Esto se puede hacer con los datos que se fueron guardando en las iteraciones.
+
 ## [TO-DO] Rehacer los pasos de la bitácora con la nueva verdad de campo
+
