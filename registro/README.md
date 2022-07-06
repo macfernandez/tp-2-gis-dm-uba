@@ -182,7 +182,28 @@ python -m src.workflow concat_folder mask_agri_aoi.shp DN [--ram]
 Se obtiene el `.sqlite` que abarca toda la zona cultivable, con
 la etiqueta `1`.
 
-## [TO-DO] Realizar el etiquetado continuo
+## Realizar el etiquetado continuo
+
+Para este paso, NO IMPORTA QUÉ HAYAS HECHO ANTES, hacé lo siguiente.
+
+Descarga los .sqlite de verdad de campo (te va a servir para entrenar el modelo)
+y de mask_agri_aoi (es el .tif con las bandas pero recortado con los polígonos
+de la zona cultivable y guardado en formato .sqlite) tal como se indica a continuación:
+
+```
+gsutil -m cp -r gs://gis-obt/selection_verdad_campo data/
+```
+
+```
+gsutil -m cp -r gs://gis-obt/selection_mask_agri_aoi data/
+```
+
+Yo puse para que descargue cada carpeta a `data/`. Si preferís otra opción, sentite libre.
+Lo importante es que no descargues los archivos que están en `selection_verdad_campo` y en
+`selection_mask_agri_aoi` al mismo lugar porque tienen el mismo nombre y se van a pisar.
+
+Con eso, hacete un pull del repo en la rama `model/random_forest`. En la carpeta `nb` hay una
+notebook llamada [randomforest_iterations](../nb)
 
 ## [TO-DO] Análisis de cómo se fue modificando la verdad de campo en las iteraciones
 
