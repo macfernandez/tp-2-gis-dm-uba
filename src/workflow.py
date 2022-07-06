@@ -7,7 +7,7 @@ from src.obtcli_command import run_command
 parser = argparse.ArgumentParser()
 parser.add_argument('concat_folder', help='Folder with (only) concat files. If there is more than one concat file (one per tile), make the workflow for all of them.')
 parser.add_argument('vec_shp', help='Path to file with labels.')
-parser.add_argument('field', choices=['id','DN'], help='Column name with label for sample selection and extraction.')
+parser.add_argument('field', help='Column name with label for sample selection and extraction.')
 parser.add_argument('--ram', '-r', default=1000, help='Ram. Default: 1000.')
 args = parser.parse_args()
 
