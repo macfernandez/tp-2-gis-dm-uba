@@ -191,11 +191,11 @@ y de mask_agri_aoi (es el `.tif` con las bandas pero recortado con los polígono
 de la zona cultivable y guardado en formato `.sqlite`) tal como se indica a continuación:
 
 ```
-gsutil -m cp -r gs://gis-obt/selection_verdad_campo data/
+gsutil -m cp -r gs://gis-obt/data/selection_verdad_campo data/
 ```
 
 ```
-gsutil -m cp -r gs://gis-obt/selection_mask_agri_aoi data/
+gsutil -m cp -r gs://gis-obt/data/selection_mask_agri_aoi data/
 ```
 
 Yo puse para que descargue cada carpeta a `data/`. Si preferís otra opción, sentite libre.
