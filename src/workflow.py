@@ -63,7 +63,6 @@ for f in files:
         vec=args.vec_shp,
         classes_stats=output_file_polygon,
         field=args.field,
-        strategy='total',
         output_rates=output_selection_rates,
         output_sqlite=output_selection_samples,
         ram=args.ram

@@ -4,7 +4,7 @@ from string import Template
 
 options = {
     "PolygonClassStatistics": "-in $input_file -vec $vec -field  $field -out $output_file -ram $ram",
-    "SampleSelection": "-in $input_file -vec $vec -instats $classes_stats -field $field -strategy $strategy -outrates $output_rates -out $output_sqlite -ram $ram",
+    "SampleSelection": "-in $input_file -vec $vec -instats $classes_stats -field $field -strategy percent -strategy.percent.p 1.0 -outrates $output_rates -out $output_sqlite -ram $ram",
     "SampleExtraction": "-in $input_file -vec $vec -outfield prefix -outfield.prefix.name band_ -field $field -ram $ram",
     "ComputeImagesStatistics": "-il $input_file -out.xml $output_xml_file -ram $ram"
 }
