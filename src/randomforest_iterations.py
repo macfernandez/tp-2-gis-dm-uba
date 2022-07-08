@@ -23,7 +23,6 @@ from utilities import *
 parser = argparse.ArgumentParser()
 parser.add_argument('train_folder', help='Path to folder with .sqlite for training.')
 parser.add_argument('pred_folder', help='Path to folder with .sqlite for prediction.')
-parser.add_argument('deptos_folder', help='Path to folder with .sqlite for departamentos.')
 parser.add_argument('model_parameters', help='Path to file with model parameters.')
 parser.add_argument('thresholds', nargs='+', help='Cut off thresholds.')
 parser.add_argument('output_folder', help='Path to folder for saving model outputs.')
@@ -55,28 +54,10 @@ for sf in pred_sqlite_files:
     df['tile_file'] = tile
     pred_data = pd.concat([pred_data, df], ignore_index=True)
 
-# Agregado de departamentos
-deptos_sqlite_files = glob(args.deptos_folder)
-
-deptos_data = pd.DataFrame()
-
-for sf in deptos_sqlite_files:
-    file_name = os.path.basename(sf)
-    tile = re.search(r'\d+',file_name).group()
-    cnx = connect(sf)
-    df = pd.read_sql_query("SELECT * FROM output", cnx)
-    df['tile_file'] = tile
-    deptos_data = pd.concat([deptos_data, df], ignore_index=True)
-
-
-train_data = train_data.merge(deptos_data[['ogc_fid','nombre','tile_file']], how='left', on=['ogc_fid','tile_file'])
-pred_data = pred_data.merge(deptos_data[['ogc_fid','nombre','tile_file']], how='left', on=['ogc_fid','tile_file'])
-
 # train_data está dentro de pred_data
 # saco esas filas de pred_data
 # así no predecimos con lo mismo con lo que entrenamos
-
-merged_data = pred_data.merge(train_data[['ogc_fid','nombre','tile_file','id','cultivo']], how='left', on=['ogc_fid','tile_file','nombre'], indicator=True)
+merged_data = pred_data.merge(train_data[['ogc_fid','tile_file']], how='left', on=['ogc_fid','tile_file'], indicator=True)
 train_data = merged_data[merged_data._merge=='both'].drop(columns=['_merge'])
 pred_data = merged_data[merged_data._merge=='left_only'].drop(columns=['_merge'])
 
