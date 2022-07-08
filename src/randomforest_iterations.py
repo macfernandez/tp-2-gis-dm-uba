@@ -17,19 +17,19 @@ from sqlite3 import connect
 from sklearn.preprocessing import LabelEncoder
 from sklearn.ensemble import RandomForestClassifier
 
-from utilities import *
+from src.utilities import *
 
 
 parser = argparse.ArgumentParser()
 parser.add_argument('train_folder', help='Path to folder with .sqlite for training.')
 parser.add_argument('pred_folder', help='Path to folder with .sqlite for prediction.')
 parser.add_argument('model_parameters', help='Path to file with model parameters.')
-parser.add_argument('thresholds', nargs='+', help='Cut off thresholds.')
 parser.add_argument('output_folder', help='Path to folder for saving model outputs.')
+parser.add_argument('--thresholds','-t', default=[0.6], nargs='+', help='Cut off thresholds.')
 args = parser.parse_args()
 
 # Conjunto de entrenamiento
-train_sqlite_files = glob(args.train_folder)
+train_sqlite_files = glob(f'{args.train_folder}/*.sqlite')
 
 train_data = pd.DataFrame()
 
@@ -42,7 +42,7 @@ for sf in train_sqlite_files:
     train_data = pd.concat([train_data, df], ignore_index=True)
 
 # Conjunto de predicción
-pred_sqlite_files = glob(args.pred_folder)
+pred_sqlite_files = glob(f'{args.pred_folder}/*.sqlite')
 
 pred_data = pd.DataFrame()
 
@@ -52,15 +52,15 @@ for sf in pred_sqlite_files:
     cnx = connect(sf)
     df = pd.read_sql_query("SELECT * FROM output", cnx)
     df['tile_file'] = tile
+    df.drop(columns=['id'], inplace=True)
     pred_data = pd.concat([pred_data, df], ignore_index=True)
 
 # train_data está dentro de pred_data
 # saco esas filas de pred_data
 # así no predecimos con lo mismo con lo que entrenamos
-merged_data = pred_data.merge(train_data[['ogc_fid','tile_file']], how='left', on=['ogc_fid','tile_file'], indicator=True)
-train_data = merged_data[merged_data._merge=='both'].drop(columns=['_merge'])
+merged_data = pred_data.merge(train_data[['ogc_fid','tile_file','cultivo','id']], how='left', on=['ogc_fid','tile_file'], indicator=True)
+train_data = merged_data[merged_data._merge=='both'].drop(columns=['_merge']).assign(id=lambda x:x.id.astype('int'))
 pred_data = merged_data[merged_data._merge=='left_only'].drop(columns=['_merge'])
-
 
 print(f'*** Training data shape: {train_data.shape}')
 print(f'*** Prediction data shape: {pred_data.shape}')
