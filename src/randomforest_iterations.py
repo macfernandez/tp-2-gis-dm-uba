@@ -22,7 +22,7 @@ from sklearn.metrics import classification_report
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
 
-from utilities import *
+from src.utilities import *
 
 
 parser = argparse.ArgumentParser()
@@ -32,7 +32,7 @@ parser.add_argument('model_parameters', help='Path to file with model parameters
 parser.add_argument('output_folder', help='Path to folder for saving model outputs.')
 args = parser.parse_args()
 
-train_sqlite_files = glob(args.train_folder)
+train_sqlite_files = glob(f'{args.train_folder}/*.sqlite')
 
 train_data = pd.DataFrame()
 
@@ -169,7 +169,7 @@ while True:
     _ = joblib.dump(model, output_model_file)
     
     # levanta los .tif para predecir
-    pred_tif = glob('../data/feature_importance/12*.tif')
+    pred_tif = glob('../data/feature_importance/*.tif')
     
     vc_len = X_train.shape[0] + X_test.shape[0]
     new_vc_len = 0
