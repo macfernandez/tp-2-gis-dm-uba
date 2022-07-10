@@ -8,6 +8,7 @@ import shutil
 import joblib
 import rasterio
 import argparse
+import logging
 import numpy as np
 import pandas as pd
 from glob import glob
@@ -183,7 +184,7 @@ while True:
         # 12544.tif o 00000.tif
         name_raster = os.path.basename(tif)
         
-        print(f'+++ PREDICCIÓN PARA TILE: {name_raster}')
+        logging.warning(f'+++ PREDICCIÓN PARA TILE: {name_raster}')
         
         # levanta la metadata del tif
         width, height, transform = metadata_from_tile(tif)
@@ -208,7 +209,7 @@ while True:
             windows_len = len(windows)
             wn = 0
             for window in windows:
-                print(f'... Prediciendo ventana {wn} de {windows_len}')
+                logging.warning(f'... Prediciendo ventana {wn} de {windows_len}')
                 wn +=1
                 
                 win=window[0]
@@ -275,7 +276,7 @@ while True:
     
     
     # imprime información
-    print(f'''\n*** ITERACIÓN #{i:03d}
+    logging.warning(f'''\n*** ITERACIÓN #{i:03d}
     - Pixeles de entrenamiento: {X_train.shape[0]}
     - Pixeles de validación: {X_test.shape[0]}
     - Probabilidades sobre train guardadas en {output_proba_file}
