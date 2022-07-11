@@ -134,8 +134,8 @@ while True:
         json.dump(report, f, ensure_ascii=False, indent=4)
     
     kappa = cohen_kappa_score(y_test, y_hat)
-    output_kapp_file = os.path.join(output_folder, f'kapp_{n_iter}.txt')
-    with open(output_kapp_file, 'w') as f:
+    output_kappa_file = os.path.join(output_folder, f'kappa_{n_iter}.txt')
+    with open(output_kappa_file, 'w') as f:
         _ = f.write(str(kappa))
     
     # evalúa cantidad de aciertos y errores por nivel de confianza (cada 0.05)
@@ -275,5 +275,7 @@ while True:
     - Modelo guardado en: {output_model_file}
     - Nueva verdad de campo predicha: {new_vc_len}''')
     
+    i += 1
+
     if new_vc_len == 0:
         break
