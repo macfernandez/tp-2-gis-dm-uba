@@ -8,6 +8,7 @@ import shutil
 import joblib
 import rasterio
 import argparse
+import logging
 import numpy as np
 import pandas as pd
 from glob import glob
@@ -32,7 +33,11 @@ parser.add_argument('model_parameters', help='Path to file with model parameters
 parser.add_argument('output_folder', help='Path to folder for saving model outputs.')
 args = parser.parse_args()
 
-train_sqlite_files = glob(f'{args.train_folder}/*.sqlite')
+args_train_folder = args.train_folder.strip('/')
+args_pred_folder = args.pred_folder.strip('/')
+args_output_folder = args.output_folder.strip('/')
+
+train_sqlite_files = glob(f'{args_train_folder}/*.sqlite')
 
 train_data = pd.DataFrame()
 
@@ -100,7 +105,7 @@ while True:
 
     # arma carpeta para el output (i aumenta con las iteraciones)
     n_iter = '{0:03d}'.format(i)
-    output_folder = os.path.join(args.output_folder, f'randomforest_iterations_{n_iter}')
+    output_folder = os.path.join(args_output_folder, f'randomforest_iterations_{n_iter}')
     if os.path.exists(output_folder):
         shutil.rmtree(output_folder)
     os.mkdir(output_folder)
@@ -169,16 +174,17 @@ while True:
     _ = joblib.dump(model, output_model_file)
     
     # levanta los .tif para predecir
-    pred_tif = glob('../data/feature_importance/*.tif')
+    pred_tif = glob(f'{args_pred_folder}/*.tif')
     
     vc_len = X_train.shape[0] + X_test.shape[0]
     new_vc_len = 0
+
     for tif in pred_tif:
         # detecta nombre del raster
         # 12544.tif o 00000.tif
         name_raster = os.path.basename(tif)
         
-        print(f'+++ PREDICCIÓN PARA TILE: {name_raster}')
+        logging.warning(f'+++ PREDICCIÓN PARA TILE: {name_raster}')
         
         # levanta la metadata del tif
         width, height, transform = metadata_from_tile(tif)
@@ -203,7 +209,7 @@ while True:
             windows_len = len(windows)
             wn = 0
             for window in windows:
-                print(f'... Prediciendo ventana {wn} de {windows_len}')
+                logging.warning(f'... Prediciendo ventana {wn} de {windows_len}')
                 wn +=1
                 
                 win=window[0]
@@ -251,8 +257,12 @@ while True:
                 # asigna id real
                 # enmascara las predicciones cuyo score no supera al umbral (-99)
                 # y lo guarda en un nuevo .tif
-                tif_df.loc[mask_df.id==-99, 'id'] = tif2predict.id_le.map(map_le2id)
-                tif_df.loc[mask_df.id==-99, 'score'] = tif2predict.score
+                if i>0:
+                    tif_df.loc[mask_df.id==-99, 'id'] = tif2predict.id_le.map(map_le2id)
+                    tif_df.loc[mask_df.id==-99, 'score'] = tif2predict.score
+                else:
+                    tif_df['id'] = tif2predict.id_le.map(map_le2id)
+                    tif_df['score'] = tif2predict.score
                 tif_df.loc[tif_df.score<threshold, 'id'] = -99
                 tif_class = np.expand_dims(tif_df.id.to_numpy().reshape(n,m), axis=0)
                 dst.write(tif_class, window=win)
@@ -266,7 +276,7 @@ while True:
     
     
     # imprime información
-    print(f'''\n*** ITERACIÓN #{i:03d}
+    logging.warning(f'''\n*** ITERACIÓN #{i:03d}
     - Pixeles de entrenamiento: {X_train.shape[0]}
     - Pixeles de validación: {X_test.shape[0]}
     - Probabilidades sobre train guardadas en {output_proba_file}
