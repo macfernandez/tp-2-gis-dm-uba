@@ -88,6 +88,7 @@ next_train = pd.DataFrame()
 i = 0
 while True:
     
+    logging.warning(f'##### INICIANDO ITERACIÓN #{i}')
     # si el entrenamiento de la próxima iteración es mayor (en cantidad)
     # a la data de entrenamiento, entonces toma el entrenamiento de la próxima
     # iteración
@@ -110,6 +111,7 @@ while True:
         shutil.rmtree(output_folder)
     os.mkdir(output_folder)
     
+    logging.warning(f'[{n_iter}] ---> Entrenamiento de modelo para definir umbral')
     # segmenta en train y test
     X = train_data.filter(regex='band_').fillna(-99).to_numpy()
     y = train_data['id_le'].to_numpy()
@@ -121,6 +123,7 @@ while True:
     model = RandomForestClassifier(**parameters)
     model.fit(X_train, y_train)
     
+    logging.warning(f'[{n_iter}] ---> Predicción de probabilidades para definir umbral')
     # predice sobre el conjunto de testeo
     probas = model.predict_proba(X_test)
     output_proba_file = os.path.join(output_folder, f'probas_{n_iter}.npy')
@@ -128,6 +131,7 @@ while True:
     
     y_hat = probas.argmax(axis=1)
     
+    logging.warning(f'[{n_iter}] ---> Generación de métricas de modelo para definir umbral')
     # guarda métricas
     cmatrix = confusion_matrix(y_test, y_hat, normalize='all')
     output_cmpatrix_file = os.path.join(output_folder, f'cmatrix_{n_iter}.npy')
@@ -157,6 +161,7 @@ while True:
     output_success_file = os.path.join(output_folder, f'hits_misses_{n_iter}.csv')
     hits_misses_df.to_csv(output_success_file, index=False)
     
+    logging.warning(f'[{n_iter}] ---> Seección de umbral')
     # selecciona el umbral
     # umbral = score cuya cantidad de aciertos duplique la cantidad de errores + 1
     threshold = hits_misses_df.loc[hits_misses_df.hit>(hits_misses_df.miss+1)*2,'confidence'].min()
@@ -164,6 +169,7 @@ while True:
     with open(output_threshold_file, 'w') as f:
         _ = f.write(str(threshold))
 
+    logging.warning(f'[{n_iter}] ---> Entrenamiento de modelo para predicción de clases')
     # instancia y entrena el modelo con set de entrenamiento + validación
     iter_X = train_data.filter(regex='band_').fillna(-99999).to_numpy()
     iter_y = train_data['id_le'].to_numpy()
@@ -179,6 +185,7 @@ while True:
     vc_len = X_train.shape[0] + X_test.shape[0]
     new_vc_len = 0
 
+    logging.warning(f'[{n_iter}] ---> Predicción de clases para rásters')
     for tif in pred_tif:
         # detecta nombre del raster
         # 12544.tif o 00000.tif
@@ -285,8 +292,6 @@ while True:
     output_vc_file = os.path.join(output_folder, f'verdad_campo_{n_iter}.txt')
     with open(output_vc_file, 'w') as f:
         _ = f.write(f'''verdad_campo_entrenamiento,{vc_len}\nvedad_campo_nueva{new_vc_len}\n''')
-    
-    
     # imprime información
     logging.warning(f'''\n*** ITERACIÓN #{i:03d}
     - Pixeles de entrenamiento: {X_train.shape[0]}
@@ -296,8 +301,7 @@ while True:
     - Pixeles del modelo final: {vc_len}
     - Modelo guardado en: {output_model_file}
     - Nueva verdad de campo predicha: {new_vc_len}''')
-    
     i += 1
 
-    if new_vc_len == 0:
-        break
+    #if new_vc_len == 0:
+    #    break
