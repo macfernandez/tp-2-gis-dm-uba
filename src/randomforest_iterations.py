@@ -248,9 +248,16 @@ while True:
                 tif2predict['id_le'] = iter_prediction.argmax(axis=1)
                 tif2predict['score'] = iter_prediction.max(axis=1)
 
+                # si la banda_1==-99
+                # ese pixel es nan (no tiene info)
+                # entonces indicame con un valor que ese no me interesa (-111)
+                # este valor no se va a tener en cuenta después para enmascarar
+                tif2predict.loc[tif2predict.band_1==-99,'id_le'] = -111
+
                 # si el score de la predicción supera al umbral
+                # y el pixel no es nulo
                 # agrega esa info al entrenamiento de la próxima iteración
-                new_vc = tif2predict[tif2predict.score>=threshold]
+                new_vc = tif2predict[(tif2predict.score>=threshold) & (tif2predict.id_le!=-111)]
                 new_vc['id_le'] = new_vc.id_le.astype('int')
                 next_train = pd.concat([next_train, new_vc])
                 new_vc_len += new_vc.shape[0]
@@ -259,12 +266,16 @@ while True:
                 # enmascara las predicciones cuyo score no supera al umbral (-99)
                 # y lo guarda en un nuevo .tif
                 if i>0:
-                    tif_df.loc[mask_df.id==-99, 'id'] = tif2predict.id_le.map(map_le2id)
+                    # si el id_le está en el diccionario map_le2id, asignale el id mapeado
+                    # si no está (-111 no está), dejá ese
+                    # lo hago así porque después busco los -99 para mapear
+                    # los que son -111 ya ni los miro (son nulos)
+                    tif_df.loc[mask_df.id==-99, 'id'] = tif2predict.id_le.apply(lambda x:map_le2id.get(x, x))
                     tif_df.loc[mask_df.id==-99, 'score'] = tif2predict.score
                 else:
-                    tif_df['id'] = tif2predict.id_le.map(map_le2id)
+                    tif_df['id'] = tif2predict.id_le.apply(lambda x:map_le2id.get(x, x))
                     tif_df['score'] = tif2predict.score
-                tif_df.loc[tif_df.score<threshold, 'id'] = -99
+                tif_df.loc[(tif_df.score<threshold) & (tif_df.id!=-111), 'id'] = -99
                 tif_class = np.expand_dims(tif_df.id.to_numpy().reshape(n,m), axis=0)
                 dst.write(tif_class, window=win)
                 
