@@ -18,8 +18,6 @@ mascara <- raster("mapas/data/mask_agri/mask_agri_aoi.tif")
 
 paleta <- wes_palette("Darjeeling1", n = 2)
 
-unique(mascara[])
-
 mascar_spdf <- as(mascara, "SpatialPixelsDataFrame")
 mascara_df <- as.data.frame(mascar_spdf)
 colnames(mascara_df) <- c("value", "x", "y")
