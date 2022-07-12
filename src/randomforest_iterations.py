@@ -243,6 +243,7 @@ while True:
                     mask = src_mask.read(window=win) 
                     mask_r, mask_m, mask_n = mask.shape
                     mask_df = pd.DataFrame(mask.reshape(mask_r,mask_m*mask_n)).T
+                    mask_df.columns = ['id']
                     tif2predict = deepcopy(tif_df[mask_df.id==-99])
                 # si está en la primera iteración
                 # toma el tif completo
