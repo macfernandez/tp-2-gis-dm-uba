@@ -234,7 +234,8 @@ while True:
                     # para enmascarar
                     src_mask = rasterio.open(prev_tif)
                     mask = src_mask.read(window=win) 
-                    mask_df = pd.DataFrame(mask.reshape(r,m*n)).T
+                    mask_r, mask_m, mask_n = mask.shape
+                    mask_df = pd.DataFrame(mask.reshape(mask_r,mask_m*mask_n)).T
                     tif2predict = deepcopy(tif_df[mask_df.id==-99])
                 # si está en la primera iteración
                 # toma el tif completo
