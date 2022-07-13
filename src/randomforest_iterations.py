@@ -101,11 +101,8 @@ while True:
     # porquee estaría duplicando los datos)
     # así, primera iteración va a usar la data original y ya en la segunda
     # iteración va a tomar el entrenamiento con la nueva verdad
-    logging.warning('NEXT TRAIN vs. TRAIN DATA')
-    logging.warning(f'{next_train.shape[0]} vs. {train_data.shape[0]}')
     if i>0:
         train_data = next_train
-    logging.warning(f'NEW TRAIN {train_data.shape[0]}')
 
     # arma carpeta para el output (i aumenta con las iteraciones)
     n_iter = '{0:03d}'.format(i)
@@ -270,12 +267,11 @@ while True:
                     # agrega esa info al entrenamiento de la próxima iteración
                     new_vc = tif2predict[(tif2predict.score>=threshold) & (tif2predict.id_le!=-111)]
                     new_vc['id_le'] = new_vc.id_le.astype('int')
-                    logging.warning('NEW VC')
-                    logging.warning(new_vc.head())
+                    
+                    logging.warning(f'NEW VC {new_vc.shape}')
                     next_train = pd.concat([next_train, new_vc])
                     new_vc_len += new_vc.shape[0]
-
-                    logging.warning(f'NEW VC {next_train.shape}')
+                    logging.warning(f'NEXT TRAIN {next_train.shape}')
                     # asigna id real
                     # enmascara las predicciones cuyo score no supera al umbral (-99)
                     # y lo guarda en un nuevo .tif
