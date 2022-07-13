@@ -101,8 +101,11 @@ while True:
     # porquee estaría duplicando los datos)
     # así, primera iteración va a usar la data original y ya en la segunda
     # iteración va a tomar el entrenamiento con la nueva verdad
+    logging.warning('NEXT TRAIN vs. TRAIN DATA')
+    logging.warning(f'{next_train.shape[0]} vs. {train_data.shape[0]}')
     if next_train.shape[0] >= train_data.shape[0]:
         train_data = next_train
+    logging.warning(f'NEW TRAIN {train_data.shape[0]}')
 
     # arma carpeta para el output (i aumenta con las iteraciones)
     n_iter = '{0:03d}'.format(i)
