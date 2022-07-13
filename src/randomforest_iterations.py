@@ -103,7 +103,7 @@ while True:
     # iteración va a tomar el entrenamiento con la nueva verdad
     logging.warning('NEXT TRAIN vs. TRAIN DATA')
     logging.warning(f'{next_train.shape[0]} vs. {train_data.shape[0]}')
-    if next_train.shape[0] >= train_data.shape[0]:
+    if i>0:
         train_data = next_train
     logging.warning(f'NEW TRAIN {train_data.shape[0]}')
 
@@ -275,6 +275,7 @@ while True:
                     next_train = pd.concat([train_data, new_vc])
                     new_vc_len += new_vc.shape[0]
 
+                    logging.warning(f'NEW VC {next_train.shape}')
                     # asigna id real
                     # enmascara las predicciones cuyo score no supera al umbral (-99)
                     # y lo guarda en un nuevo .tif
