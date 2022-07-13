@@ -76,8 +76,8 @@ mapa_nvc_dic <- ggplot() +
     pad_x = unit(0.4, "in"), pad_y = unit(0.4, "in"),
     style = north_arrow_fancy_orienteering()) +
   scale_x_continuous(labels = function(x) paste0(abs(x), "°O")) +
-  scale_fill_manual(values = paleta,label = c("", "No cultivable", "Cultivable")) +
-  labs(fill = str_wrap("Clasificación como nueva verdad de campo", 20))+
+  scale_fill_manual(values = paleta,label = c("No", "Sí")) +
+  labs(fill = str_wrap("Clasificado como nueva verdad de campo", 20))+
   theme(axis.title = element_blank())
 
-ggsave("figuras/mapa_nvc_dic.png", mapa_nvc_dic, width = 8, heigh = 7)
+ggsave("figuras/mapa_nvc_dic.png", mapa_nvc_dic, width = 8, heigh = 6)
