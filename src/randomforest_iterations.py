@@ -270,6 +270,8 @@ while True:
                     # agrega esa info al entrenamiento de la próxima iteración
                     new_vc = tif2predict[(tif2predict.score>=threshold) & (tif2predict.id_le!=-111)]
                     new_vc['id_le'] = new_vc.id_le.astype('int')
+                    logging.warning('NEW VC')
+                    logging.warning(new_vc.head())
                     next_train = pd.concat([train_data, new_vc])
                     new_vc_len += new_vc.shape[0]
 
