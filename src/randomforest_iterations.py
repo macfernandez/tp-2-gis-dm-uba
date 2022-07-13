@@ -272,7 +272,7 @@ while True:
                     new_vc['id_le'] = new_vc.id_le.astype('int')
                     logging.warning('NEW VC')
                     logging.warning(new_vc.head())
-                    next_train = pd.concat([train_data, new_vc])
+                    next_train = pd.concat([next_train, new_vc])
                     new_vc_len += new_vc.shape[0]
 
                     logging.warning(f'NEW VC {next_train.shape}')
