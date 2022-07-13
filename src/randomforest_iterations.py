@@ -252,42 +252,45 @@ while True:
                 # toma el tif completo
                 else:
                     tif2predict = deepcopy(tif_df)
+
                 logging.warning(tif2predict.head())
                 logging.warning(tif2predict.shape)
-                #img_df.rename(columns={col:f'band_{col}' for col in img_df.columns}, inplace=True)
-                # agrega columna con predicciones
-                iter_prediction = model.predict_proba(tif2predict.to_numpy())
-                tif2predict['id_le'] = iter_prediction.argmax(axis=1)
-                tif2predict['score'] = iter_prediction.max(axis=1)
+                if tif2predict.shape[0]>0:
+                    # agrega columna con predicciones
+                    iter_prediction = model.predict_proba(tif2predict.to_numpy())
+                    tif2predict['id_le'] = iter_prediction.argmax(axis=1)
+                    tif2predict['score'] = iter_prediction.max(axis=1)
 
-                # si la banda_1==-99
-                # ese pixel es nan (no tiene info)
-                # entonces indicame con un valor que ese no me interesa (-111)
-                # este valor no se va a tener en cuenta después para enmascarar
-                tif2predict.loc[tif2predict.band_1==-99,'id_le'] = -111
+                    # si la banda_1==-99
+                    # ese pixel es nan (no tiene info)
+                    # entonces indicame con un valor que ese no me interesa (-111)
+                    # este valor no se va a tener en cuenta después para enmascarar
+                    tif2predict.loc[tif2predict.band_1==-99,'id_le'] = -111
 
-                # si el score de la predicción supera al umbral
-                # y el pixel no es nulo
-                # agrega esa info al entrenamiento de la próxima iteración
-                new_vc = tif2predict[(tif2predict.score>=threshold) & (tif2predict.id_le!=-111)]
-                new_vc['id_le'] = new_vc.id_le.astype('int')
-                next_train = pd.concat([train_data, new_vc])
-                new_vc_len += new_vc.shape[0]
-                
-                # asigna id real
-                # enmascara las predicciones cuyo score no supera al umbral (-99)
-                # y lo guarda en un nuevo .tif
-                if i>0:
-                    # si el id_le está en el diccionario map_le2id, asignale el id mapeado
-                    # si no está (-111 no está), dejá ese
-                    # lo hago así porque después busco los -99 para mapear
-                    # los que son -111 ya ni los miro (son nulos)
-                    tif_df.loc[mask_df.id==-99, 'id'] = tif2predict.id_le.apply(lambda x:map_le2id.get(x, x))
-                    tif_df.loc[mask_df.id==-99, 'score'] = tif2predict.score
+                    # si el score de la predicción supera al umbral
+                    # y el pixel no es nulo
+                    # agrega esa info al entrenamiento de la próxima iteración
+                    new_vc = tif2predict[(tif2predict.score>=threshold) & (tif2predict.id_le!=-111)]
+                    new_vc['id_le'] = new_vc.id_le.astype('int')
+                    next_train = pd.concat([train_data, new_vc])
+                    new_vc_len += new_vc.shape[0]
+
+                    # asigna id real
+                    # enmascara las predicciones cuyo score no supera al umbral (-99)
+                    # y lo guarda en un nuevo .tif
+                    if i>0:
+                        # si el id_le está en el diccionario map_le2id, asignale el id mapeado
+                        # si no está (-111 no está), dejá ese
+                        # lo hago así porque después busco los -99 para mapear
+                        # los que son -111 ya ni los miro (son nulos)
+                        tif_df.loc[mask_df.id==-99, 'id'] = tif2predict.id_le.apply(lambda x:map_le2id.get(x, x))
+                        tif_df.loc[mask_df.id==-99, 'score'] = tif2predict.score
+                    else:
+                        tif_df['id'] = tif2predict.id_le.apply(lambda x:map_le2id.get(x, x))
+                        tif_df['score'] = tif2predict.score
+                    tif_df.loc[(tif_df.score<threshold) & (tif_df.id!=-111), 'id'] = -99
                 else:
-                    tif_df['id'] = tif2predict.id_le.apply(lambda x:map_le2id.get(x, x))
-                    tif_df['score'] = tif2predict.score
-                tif_df.loc[(tif_df.score<threshold) & (tif_df.id!=-111), 'id'] = -99
+                    tif_df['id'] = mask_df.id
                 tif_class = np.expand_dims(tif_df.id.to_numpy().reshape(n,m), axis=0)
                 dst.write(tif_class, window=win)
                 
