@@ -164,8 +164,7 @@ while True:
     logging.warning(f'[{n_iter}] ---> Seección de umbral')
     # selecciona el umbral
     # umbral = score cuya cantidad de aciertos duplique la cantidad de errores + 1
-    #threshold = hits_misses_df.loc[hits_misses_df.hit>(hits_misses_df.miss+1)*2,'confidence'].min()
-    threshold = .8
+    threshold = hits_misses_df.loc[hits_misses_df.hit>(hits_misses_df.miss+1)*2,'confidence'].min()
     output_threshold_file = os.path.join(output_folder, f'threshold_{n_iter}.txt')
     with open(output_threshold_file, 'w') as f:
         _ = f.write(str(threshold))
@@ -245,16 +244,12 @@ while True:
                     mask_r, mask_m, mask_n = mask.shape
                     mask_df = pd.DataFrame(mask.reshape(mask_r,mask_m*mask_n)).T
                     mask_df.columns = ['id']
-                    logging.warning(mask_df)
-                    logging.warning(mask_df.shape)
                     tif2predict = deepcopy(tif_df[mask_df.id==-99])
                 # si está en la primera iteración
                 # toma el tif completo
                 else:
                     tif2predict = deepcopy(tif_df)
 
-                logging.warning(tif2predict.head())
-                logging.warning(tif2predict.shape)
                 if tif2predict.shape[0]>0:
                     # agrega columna con predicciones
                     iter_prediction = model.predict_proba(tif2predict.to_numpy())
