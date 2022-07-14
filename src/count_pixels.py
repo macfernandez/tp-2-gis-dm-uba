@@ -9,17 +9,15 @@ def calc_n_pix(input_folder):
     crops = {}
     results = glob.glob(input_folder + '*.tif')
     for file in results:
-    print('Calculando ' + file)
-    filename = os.path.splitext(os.path.basename(file))[0]
-    raster = rio.open(file).read()
-    raster_crop = raster[raster==1]
-    sum_pixels = raster_crop.sum()
-    print(sum_pixels)
-    crops[filename] = [sum_pixels]
-    
+        print('Calculando ' + file)
+        filename = os.path.splitext(os.path.basename(file))[0]
+        raster = rio.open(file).read()
+        raster_crop = raster[raster==1]
+        sum_pixels = raster_crop.sum()
+        print(sum_pixels)
+        crops[filename] = [sum_pixels]
     df_pixeles = pd.DataFrame(crops).T
-
-    print(df_pixeles)
+    return print(df_pixeles)
 
 if __name__ == '__main__':
 
