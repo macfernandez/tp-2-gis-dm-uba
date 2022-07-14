@@ -23,19 +23,11 @@ if __name__ == '__main__':
 
     import argparse
 
-    all_index = list(indexes.keys())
-
     parser = argparse.ArgumentParser(
         prog='Calculadora de número total de pixeles en el tile',
         description='Calcula el numero total de pixeles en una lista de tiles, parte final de bitácora'
     )
     parser.add_argument('input_folder', type=str, help='Folder with .tif files for using as input.')
     args = parser.parse_args()
-
-    if not args.index:
-        args.__setattr__('index',all_index)
-
-    for i in args.index:
-        calc_n_pix(
-            input_folder=args.input_folder,
-        )
+    
+    calc_n_pix(input_folder=args.input_folder)
