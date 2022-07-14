@@ -17,6 +17,8 @@ def calc_n_pix(input_folder):
         print(sum_pixels)
         crops[filename] = [sum_pixels]
     df_pixeles = pd.DataFrame(crops).T
+    df_pixeles.rename(columns={ df_pixeles.columns[0]: "Pixeles" }, inplace = True)
+    df_pixeles['Hectareas'] = df_pixeles['Pixeles'] * 0.04
     return print(df_pixeles)
 
 if __name__ == '__main__':
